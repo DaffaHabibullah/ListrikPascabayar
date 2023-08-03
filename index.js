@@ -12,6 +12,8 @@ app.get('/', (req, res) => {
     res.send('Server telah berjalan!');
 });
 
+app.use('/', require('./routes/user/auth'));
+
 
 
 module.exports = app;
