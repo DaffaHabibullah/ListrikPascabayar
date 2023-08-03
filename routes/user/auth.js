@@ -65,15 +65,30 @@ router.post('/login', (req, res) => {
             return res.status(400).json({ message: 'Username atau password salah' });
         }
         const hashedPassword = selectResults[0].password;
+
         bcrypt.compare(password, hashedPassword, (compareErr, compareResult) => {
             if (compareErr) {
                 console.error('Error comparing password:', compareErr);
                 return res.status(500).json({ message: 'Internal server error' });
             }
-            if (!compareResult) {
-                return res.status(400).json({ message: 'Username atau password salah' });
+
+            if (compareResult) {
+                return res.status(200).json({ message: 'Login berhasil' });
+            } else {
+                if (password === hashedPassword) {
+                    const newHashedPassword = bcrypt.hashSync(password, 10);
+                    const updateQuery = 'UPDATE user SET password = ? WHERE username = ?';
+                    db.query(updateQuery, [newHashedPassword, username], (updateErr) => {
+                        if (updateErr) {
+                            console.error('Error updating password:', updateErr);
+                            return res.status(500).json({ message: 'Internal server error' });
+                        }
+                        return res.status(200).json({ message: 'Login berhasil' });
+                    });
+                } else {
+                    return res.status(400).json({ message: 'Username atau password salah' });
+                }
             }
-            return res.status(200).json({ message: 'Login berhasil' });
         });
     });
 });
