@@ -14,6 +14,7 @@ app.get('/', (req, res) => {
 
 app.use('/', require('./routes/user/auth'));
 app.use('/', require('./routes/user/pelanggan'));
+app.use('/', require('./routes/user/penggunaan'));
 
 
 

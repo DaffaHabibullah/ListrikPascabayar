@@ -3,6 +3,25 @@ const router = express.Router();
 const db = require('../../config');
 
 
+// Get data Pelanggan by ID Pelanggan
+router.get('/pelanggan/:id_pelanggan', (req, res) => {
+    const { id_pelanggan } = req.params;
+
+    const checkQuery = 'SELECT p.id_pelanggan, p.username, p.nomor_kwh, p.nama_pelanggan, p.alamat, t.daya AS id_tarif FROM pelanggan p LEFT JOIN tarif t ON p.id_tarif = t.id_tarif WHERE p.id_pelanggan = ?';
+    db.query(checkQuery, [id_pelanggan], (checkErr, checkResults) => {
+        if (checkErr) {
+            console.error('Error executing MySQL query:', checkErr);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+
+        if (checkResults.length === 0) {
+            return res.status(404).json({ message: 'Data pelanggan dengan ID tersebut tidak ditemukan' });
+        }
+
+        return res.status(200).json(checkResults[0]);
+    });
+});
+
 // Update data Pelanggan
 router.put('/pelanggan/update/:id_pelanggan', (req, res) => {
     const { id_pelanggan } = req.params;
