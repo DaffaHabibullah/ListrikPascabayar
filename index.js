@@ -13,6 +13,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/', require('./routes/user/auth'));
+app.use('/', require('./routes/user/pelanggan'));
 
 
 
