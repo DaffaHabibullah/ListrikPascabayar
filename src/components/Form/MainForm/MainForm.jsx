@@ -26,7 +26,7 @@ function MainForm({title, inputForm, button, link, linkdesc}) {
                         <label htmlFor="password" className="text-lg">Password:</label>
                         <input type="password" id="password" className="w-full px-1 py-1 border rounded" />
                     </div> */}
-                    <Link to="/home/dashboard" className='text-blue-500' >
+                    <Link to="/dashboard" className='text-blue-500' >
                         <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">{button}</button>
                     </Link>
                 </form>
