@@ -31,7 +31,7 @@ router.post('/pelanggan/penggunaan/:id_pelanggan', (req, res) => {
         return res.status(400).json({ message: 'Meter awal tidak boleh lebih besar dari meter akhir' });
     }
 
-    const selectPelangganQuery = 'SELECT nama_pelanggan, id_tarif FROM pelanggan WHERE id_pelanggan = ?';
+    const selectPelangganQuery = 'SELECT username, nama_pelanggan, id_tarif FROM pelanggan WHERE id_pelanggan = ?';
     db.query(selectPelangganQuery, [id_pelanggan], (selectErr, selectResults) => {
         if (selectErr) {
             console.error('Error executing MySQL query:', selectErr);
@@ -42,11 +42,12 @@ router.post('/pelanggan/penggunaan/:id_pelanggan', (req, res) => {
             return res.status(404).json({ message: 'Data pelanggan dengan ID tersebut tidak ditemukan' });
         }
 
+        const username = selectResults[0].username;
         const nama_pelanggan = selectResults[0].nama_pelanggan;
         const idTarif = selectResults[0].id_tarif;
 
-        const insertPenggunaanQuery = 'INSERT INTO penggunaan (id_pelanggan, nama_pelanggan, bulan, tahun, meter_awal, meter_akhir) VALUES (?, ?, ?, ?, ?, ?)';
-        db.query(insertPenggunaanQuery, [id_pelanggan, nama_pelanggan, bulan, tahun, meter_awal, meter_akhir], (insertErr) => {
+        const insertPenggunaanQuery = 'INSERT INTO penggunaan (id_pelanggan, username, nama_pelanggan, bulan, tahun, meter_awal, meter_akhir) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        db.query(insertPenggunaanQuery, [id_pelanggan, username, nama_pelanggan, bulan, tahun, meter_awal, meter_akhir], (insertErr) => {
             if (insertErr) {
                 console.error('Error executing MySQL query:', insertErr);
                 return res.status(500).json({ message: 'Internal server error' });
@@ -68,10 +69,10 @@ router.post('/pelanggan/penggunaan/:id_pelanggan', (req, res) => {
                     }
 
                     const tarifPerKwh = selectTarifResults[0].tarifperkwh;
-                    const jumlahMeter = (meter_akhir - meter_awal) * tarifPerKwh;
+                    const jumlahTagihan = (meter_akhir - meter_awal) * tarifPerKwh;
 
-                    const insertTagihanQuery = 'INSERT INTO tagihan (id_penggunaan, id_pelanggan, nama_pelanggan, bulan, tahun, jumlah_meter) VALUES (?, ?, ?, ?, ?, ?)';
-                    db.query(insertTagihanQuery, [idPenggunaan, id_pelanggan, nama_pelanggan, bulan, tahun, jumlahMeter], (insertTagihanErr) => {
+                    const insertTagihanQuery = 'INSERT INTO tagihan (id_penggunaan, id_pelanggan, username, nama_pelanggan, bulan, tahun, jumlah_tagihan) VALUES (?, ?, ?, ?, ?, ?, ?)';
+                    db.query(insertTagihanQuery, [idPenggunaan, id_pelanggan, username, nama_pelanggan, bulan, tahun, jumlahTagihan], (insertTagihanErr) => {
                         if (insertTagihanErr) {
                             console.error('Error executing MySQL query:', insertTagihanErr);
                             return res.status(500).json({ message: 'Internal server error' });

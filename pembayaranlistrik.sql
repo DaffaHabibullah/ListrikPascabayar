@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 03 Agu 2023 pada 19.08
+-- Waktu pembuatan: 07 Agu 2023 pada 15.53
 -- Versi server: 10.4.28-MariaDB
 -- Versi PHP: 8.0.28
 
@@ -56,13 +56,6 @@ CREATE TABLE `pelanggan` (
   `id_tarif` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data untuk tabel `pelanggan`
---
-
-INSERT INTO `pelanggan` (`id_pelanggan`, `username`, `password`, `nomor_kwh`, `nama_pelanggan`, `alamat`, `id_tarif`) VALUES
-(1, 'daffa', '$2b$10$LCSYlGJv2sRsikI7o1MHmuhk5Xj/inD17AxvtWglbld6DZQJOCEBa', NULL, NULL, NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -73,9 +66,11 @@ CREATE TABLE `pembayaran` (
   `id_pembayaran` int(11) NOT NULL,
   `id_tagihan` int(11) NOT NULL,
   `id_pelanggan` int(11) NOT NULL,
+  `username` varchar(35) NOT NULL,
   `nama_pelanggan` varchar(40) NOT NULL,
+  `bulan` varchar(25) NOT NULL,
+  `tahun` int(11) NOT NULL,
   `tanggal_pembayaran` date NOT NULL,
-  `bulan_bayar` varchar(25) NOT NULL,
   `biaya_admin` int(11) NOT NULL,
   `total_bayar` int(11) NOT NULL,
   `id_user` int(11) NOT NULL
@@ -90,6 +85,7 @@ CREATE TABLE `pembayaran` (
 CREATE TABLE `penggunaan` (
   `id_penggunaan` int(11) NOT NULL,
   `id_pelanggan` int(11) NOT NULL,
+  `username` varchar(35) NOT NULL,
   `nama_pelanggan` varchar(40) NOT NULL,
   `bulan` varchar(25) NOT NULL,
   `tahun` int(11) NOT NULL,
@@ -107,10 +103,11 @@ CREATE TABLE `tagihan` (
   `id_tagihan` int(11) NOT NULL,
   `id_penggunaan` int(11) NOT NULL,
   `id_pelanggan` int(11) NOT NULL,
+  `username` varchar(35) NOT NULL,
   `nama_pelanggan` varchar(40) NOT NULL,
   `bulan` varchar(25) NOT NULL,
   `tahun` int(11) NOT NULL,
-  `jumlah_meter` int(11) NOT NULL,
+  `jumlah_tagihan` int(11) NOT NULL,
   `status` enum('Belum Bayar','Sudah Bayar') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -160,10 +157,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `id_pelanggan`, `username`, `password`, `nama_admin`, `id_level`) VALUES
-(1, NULL, 'admin', 'admin123', 'admin 1', 1),
-(2, NULL, 'master', 'master123', 'admin 2', 1),
-(3, NULL, 'superuser', 'superuser123', 'admin 3', 1),
-(4, 1, 'daffa', '$2b$10$LCSYlGJv2sRsikI7o1MHmuhk5Xj/inD17AxvtWglbld6DZQJOCEBa', '', 2);
+(1, NULL, 'admin', '$2b$10$ilnDoLG0nHxtpwRcPFE0y.Q4lG7C7A5XCshdsi85oFwd.pMRfi0t2', 'admin 1', 1),
+(2, NULL, 'master', '$2b$10$tqHKCragcyy4vIWtWIwv1u3dlhPX/n34ch55hpUUSqPpcIqheOOEW', 'admin 2', 1),
+(3, NULL, 'superuser', '$2b$10$8bqr.dmqL4mxDxJTqw/GWexBOQ0mQ0s07P9oyxInKW9yPSI16Ij9C', 'admin 3', 1);
 
 --
 -- Indexes for dumped tables
@@ -235,7 +231,7 @@ ALTER TABLE `level`
 -- AUTO_INCREMENT untuk tabel `pelanggan`
 --
 ALTER TABLE `pelanggan`
-  MODIFY `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `pembayaran`
@@ -265,7 +261,7 @@ ALTER TABLE `tarif`
 -- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
