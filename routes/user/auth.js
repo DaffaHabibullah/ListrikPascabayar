@@ -73,6 +73,7 @@ router.post('/login', (req, res) => {
             }
 
             if (compareResult) {
+                res.cookie('authenticated', true, { httpOnly: true });
                 return res.status(200).json({ message: 'Login berhasil' });
             } else {
                 if (password === hashedPassword) {
