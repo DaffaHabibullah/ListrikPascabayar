@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Dashboard from "./pages/home/dashboard/dashboard";
+import User from "./pages/home/user/User";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -20,6 +21,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/user" element={<User />} />
             {/* <Route path="/admin" element={<Admin />} /> */}
           </Routes>
         </Router>
