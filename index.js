@@ -21,6 +21,8 @@ app.use('/', require('./routes/user/tarif'));
 app.use('/', require('./routes/user/tagihan'));
 app.use('/', require('./routes/user/pembayaran'));
 
+app.use('/', require('./routes/admin/dummy'));
+
 
 
 module.exports = app;
